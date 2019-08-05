@@ -44,23 +44,23 @@ alpha_w = [10,2,8,3]         # The alpha parameter for dirichlet prior of hidden
 
 # First, generate the starting position of the magic word for all sequences uniformly
 position = [0]*K
-for i in xrange(K):
+for i in range(K):
     position[i] = randint(0, N-w+1)
     
 # Generate the background letters for all sequences
 cat_b = dirichlet(alpha_b)
 sequences = []
-for i in xrange(K):
+for i in range(K):
     seq = []
-    for j in xrange(N):
+    for j in range(N):
         seq += [sample(alphabet, cat_b)]
     sequences += [seq]
 
 # Generate the magic words
 theta = dirichlet(alpha_w, w)
-for i in xrange(K):
+for i in range(K):
     start_pos = position[i]
-    for j in xrange(w):
+    for j in range(w):
         sequences[i][start_pos+j] = sample(alphabet, theta[j])
 
 
@@ -86,13 +86,13 @@ if WRITE_TO_FILE:
     f.close()
     
 else:
-    print 'K', K
-    print 'N', N
-    print 'w', w
-    print 'alphabet', alphabet
-    print 'alpha_b', alpha_b
-    print 'alpha_w', alpha_w
+    print('K', K)
+    print('N', N)
+    print('w', w)
+    print('alphabet', alphabet)
+    print('alpha_b', alpha_b)
+    print('alpha_w', alpha_w)
     
     for s in sequences:
-        print s
-    print 'position', position
+        print(s)
+    print('position', position)

@@ -17,12 +17,12 @@ k = 3
 
 new_pos = gibbs.sampling(seqs, k)
 
-words = [seqs[i][new_pos[i]:new_pos[i]+k] for i in xrange(len(seqs))]
-print words
+words = [seqs[i][new_pos[i]:new_pos[i]+k] for i in range(len(seqs))]
+print(words)
 
 # In order to enhance the accuracy, run the sampling a couple of times (multiple chains)
 result = {}
-for i in xrange(20):
+for i in range(20):
     new_pos = gibbs.sampling(seqs, k)
     #print new_pos
     tnp = tuple(new_pos)    
@@ -39,5 +39,5 @@ for key in result:
         max_pos = list(key)
         max_vote = result[key]
 
-words = [seqs[i][max_pos[i]:max_pos[i]+k] for i in xrange(len(seqs))]
-print words
+words = [seqs[i][max_pos[i]:max_pos[i]+k] for i in range(len(seqs))]
+print(words)

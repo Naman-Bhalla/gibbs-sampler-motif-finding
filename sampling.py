@@ -15,7 +15,7 @@ def sample(alphabet, dist):
     sampl = None
     cum_dist = np.cumsum(dist)
     r = rand()
-    for i in xrange(len(dist)):
+    for i in range(len(dist)):
         if r < cum_dist[i]:
             sampl = alphabet[i]
             break

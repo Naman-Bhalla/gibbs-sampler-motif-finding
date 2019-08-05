@@ -36,7 +36,7 @@ def sampling(sequences, w):
         last_pos = pos[:]
         
         # We pick the sequence, well, in sequence starting from index 0
-        for i in xrange(K):
+        for i in range(K):
             # We sample the next position of magic word in this sequence
             # Therefore, we exclude this sequence from model calculation
             seq_minus = sequences[:]; del seq_minus[i]
@@ -50,8 +50,8 @@ def sampling(sequences, w):
             N = len(sequences[i])
             qx = [1]*(N-w+1)
             px = [1]*(N-w+1)
-            for j in xrange(N-w+1):
-                for k in xrange(w):
+            for j in range(N-w+1):
+                for k in range(w):
                     c = sequences[i][j+k]
                     qx[j] = qx[j] * q[c][k]
                     px[j] = px[j] * p[c]
@@ -59,11 +59,11 @@ def sampling(sequences, w):
             # Compute the ratio between word and background, the pythonic way
             Aj = [x/y for (x,y) in zip(qx, px)]
             norm_c = sum(Aj)
-            Aj = map(lambda x: x/norm_c, Aj)
+            Aj = [x/norm_c for x in Aj]
             #print 'Aj', Aj
             
             # Sampling new position with regards to probability distribution Aj
-            pos[i] = sample(range(N-w+1), Aj)
+            pos[i] = sample(list(range(N-w+1)), Aj)
         #print pos
     return pos
             
@@ -76,20 +76,20 @@ def compute_model(sequences, pos, alphabet, w):
     p = {x: 1 for x in alphabet}
     
     # Count the number of character occurrence in the particular position of word
-    for i in xrange(len(sequences)):
+    for i in range(len(sequences)):
         start_pos = pos[i]        
-        for j in xrange(w):
+        for j in range(w):
             c = sequences[i][start_pos+j]
             q[c][j] += 1
     # Normalize the count
     for c in alphabet:
-        for j in xrange(w):
+        for j in range(w):
             q[c][j] = q[c][j] / float( len(sequences)+len(alphabet) )
     
     # Count the number of character occurrence in background position
     # which mean everywhere except in the word position
-    for i in xrange(len(sequences)):
-        for j in xrange(len(sequences[i])):
+    for i in range(len(sequences)):
+        for j in range(len(sequences[i])):
             if j < pos[i] or j > pos[i]+w:
                 c = sequences[i][j]
                 p[c] += 1
@@ -107,7 +107,7 @@ def sample(alphabet, dist):
     sampl = None
     cum_dist = np.cumsum(dist)
     r = rand()
-    for i in xrange(len(dist)):
+    for i in range(len(dist)):
         if r < cum_dist[i]:
             sampl = alphabet[i]
             break
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         sequences = []
         for line in sys.stdin:
             sequences += [line]
-        print sampling(sequences, w)
+        print(sampling(sequences, w))
     
     elif len(sys.argv) == 2:
         sequences = []
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         w = int(f.readline())
         for line in f.readlines():
             sequences += [line[:-1]]
-        print sampling(sequences, w)
+        print(sampling(sequences, w))
         
     else:
-        print 'Error!!! Either use 1 argument or feed the data directly through standard input. For more information, read the README'
+        print('Error!!! Either use 1 argument or feed the data directly through standard input. For more information, read the README')
